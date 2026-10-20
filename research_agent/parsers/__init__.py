@@ -1,0 +1,1 @@
+from research_agent.parsers.pdf_parser import PaperPDFParser

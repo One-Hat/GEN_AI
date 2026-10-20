@@ -1,0 +1,15 @@
+# Core dependencies for Deep Research Agent
+pydantic>=2.0.0
+requests>=2.31.0
+networkx>=3.0
+beautifulsoup4>=4.12.0
+
+# PDF Parsing (supports PyMuPDF lightweight extraction and Docling if installed)
+pymupdf>=1.23.0
+
+# Embeddings & Vector Search (runs locally, 100% free)
+sentence-transformers>=2.2.0
+numpy>=1.24.0
+
+# Optional rich CLI & Markdown visualization
+rich>=13.0.0
