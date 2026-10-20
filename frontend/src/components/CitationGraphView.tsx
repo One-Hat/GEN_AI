@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Share2, ArrowUpRight, Filter, BookOpen, Sparkles, CheckCircle2 } from 'lucide-react';
-import { CitationConnection, PaperCard } from '../types';
+import type { CitationConnection, PaperCard } from '../types';
 
 interface CitationGraphViewProps {
   card: PaperCard;
@@ -54,7 +54,7 @@ export const CitationGraphView: React.FC<CitationGraphViewProps> = ({ card, conn
           <div className="flex items-center gap-2 mb-1">
             <Share2 className="w-5 h-5 text-cyan-400" />
             <h3 className="text-xl font-bold text-white tracking-tight">
-              Interconnection Topology & Citation Graph
+              Interconnection Topology: {card.title}
             </h3>
           </div>
           <p className="text-xs text-slate-400">

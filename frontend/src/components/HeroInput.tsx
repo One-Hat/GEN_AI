@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search, FileText, GitCompare, Share2, ArrowRight, Sparkles, BookOpen } from 'lucide-react';
-import { ViewMode } from '../types';
+import type { ViewMode } from '../types';
 
 interface HeroInputProps {
   currentMode: ViewMode;

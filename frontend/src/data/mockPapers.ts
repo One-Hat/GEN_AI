@@ -1,4 +1,4 @@
-import { PaperCard, CitationConnection } from '../types';
+import type { PaperCard, CitationConnection } from '../types';
 
 export const SAMPLE_PAPERS: Record<string, { card: PaperCard; connections: CitationConnection[] }> = {
   'dpo': {

@@ -181,10 +181,24 @@ ollama pull qwen2.5:7b
 ```
 *(No GPU? Ollama runs smoothly on standard CPUs using 4-bit quantized GGUFs).*
 
-### 3. Dissect Your First Paper
+### 3. Launch the Interactive Polychromatic Web UI
 ```bash
-python cli.py dissect 1706.03762
+cd frontend
+npm install
+npm run dev
 ```
+Open [http://localhost:5173](http://localhost:5173) in your browser to experience the fluid Motion-powered academic workspace.
+
+---
+
+## 🎨 Interactive Polychromatic Web Workspace
+
+The frontend is built with **React**, **Tailwind CSS**, and **Framer Motion**, featuring:
+- 🌌 **Aurora Polychromatic Mesh**: Smooth, mouse-reactive ambient gradient orbs in electric violet, sky cyan, neon magenta, and emerald.
+- 🔬 **Interactive Dissection Studio**: 3-line methodology timeline, one-click quote span inspection, and open artifact access.
+- 🛡️ **Adversarial Weakness Radar**: Expandable cards revealing verified paper excerpts, failure modes, and compute tradeoffs.
+- 🕸️ **Citation Graph Explorer**: Filterable by relationship (`Extends`, `Uses Method`, `Alternative`, `Challenges`) with Semantic Scholar context.
+- 🔍 **Grounding Audit Modal**: Live audit trail confirming verbatim spans and 0% hallucination verification.
 
 ---
 

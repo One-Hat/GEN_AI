@@ -1,122 +1,144 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import { BackgroundAurora } from './components/BackgroundAurora';
+import { Navbar } from './components/Navbar';
+import { HeroInput } from './components/HeroInput';
+import { DissectionView } from './components/DissectionView';
+import { CitationGraphView } from './components/CitationGraphView';
+import { CompareView } from './components/CompareView';
+import { GroundingAuditModal } from './components/GroundingAuditModal';
+import { SAMPLE_PAPERS } from './data/mockPapers';
+import type { ViewMode } from './types';
 
-function App() {
-  const [count, setCount] = useState(0)
+export const App: React.FC = () => {
+  const [currentMode, setCurrentMode] = useState<ViewMode>('dissect');
+  const [activePaperKey, setActivePaperKey] = useState<string>('dpo');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [loadingStage, setLoadingStage] = useState<string>('');
+  const [isAuditModalOpen, setIsAuditModalOpen] = useState<boolean>(false);
+
+  const activePaperData = SAMPLE_PAPERS[activePaperKey] || SAMPLE_PAPERS['dpo'];
+
+  const handleQuerySubmit = (query: string, mode: ViewMode) => {
+    setIsLoading(true);
+    setLoadingStage('Connecting to arXiv & Semantic Scholar API...');
+
+    setTimeout(() => {
+      setLoadingStage('Slicing PDF into Abstract, Method, and Limitations...');
+    }, 700);
+
+    setTimeout(() => {
+      setLoadingStage('Dissecting via Ollama 7B into Fixed Paper Card...');
+    }, 1400);
+
+    setTimeout(() => {
+      setLoadingStage('Verifying claims against verbatim spans...');
+    }, 2000);
+
+    setTimeout(() => {
+      setIsLoading(false);
+      setLoadingStage('');
+      if (query.toLowerCase().includes('flash') || query.includes('2307.08691')) {
+        setActivePaperKey('flashattn');
+      } else {
+        setActivePaperKey('dpo');
+      }
+      setCurrentMode(mode);
+    }, 2600);
+  };
+
+  const handleSelectPreset = (key: string) => {
+    setActivePaperKey(key);
+    setCurrentMode('dissect');
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="min-h-screen text-slate-100 relative selection:bg-pink-500 selection:text-white">
+      {/* Polychromatic Animated Aurora Background */}
+      <BackgroundAurora />
 
-      <div className="ticks"></div>
+      {/* Top Navbar */}
+      <Navbar onOpenAudit={() => setIsAuditModalOpen(true)} />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+      {/* Main Content Area */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 pb-24">
+        {/* Hero Control Panel */}
+        <HeroInput
+          currentMode={currentMode}
+          onModeChange={setCurrentMode}
+          onSubmit={handleQuerySubmit}
+          onSelectPreset={handleSelectPreset}
+          isLoading={isLoading}
+        />
+
+        {/* Loading Pipeline State indicator */}
+        {isLoading && (
+          <div className="max-w-md mx-auto my-12 p-6 rounded-2xl glass-panel text-center space-y-4 border-purple-500/30 shadow-2xl">
+            <div className="relative w-12 h-12 mx-auto">
+              <div className="absolute inset-0 rounded-full border-2 border-purple-500/20 animate-ping" />
+              <div className="w-12 h-12 rounded-full border-2 border-transparent border-t-pink-500 border-r-cyan-400 animate-spin" />
+            </div>
+            <div>
+              <span className="text-xs font-mono uppercase tracking-widest text-pink-400 block mb-1 font-semibold">
+                Running Autonomous Agent
+              </span>
+              <p className="text-sm font-medium text-slate-200">{loadingStage}</p>
+            </div>
+          </div>
+        )}
+
+        {/* Views */}
+        {!isLoading && (
+          <div className="mt-6">
+            {currentMode === 'dissect' && (
+              <DissectionView card={activePaperData.card} />
+            )}
+
+            {currentMode === 'map' && (
+              <CitationGraphView
+                card={activePaperData.card}
+                connections={activePaperData.connections}
+              />
+            )}
+
+            {currentMode === 'compare' && <CompareView />}
+
+            {currentMode === 'search' && (
+              <CitationGraphView
+                card={activePaperData.card}
+                connections={activePaperData.connections}
+              />
+            )}
+          </div>
+        )}
+      </main>
+
+      {/* Grounding Audit Modal */}
+      <GroundingAuditModal
+        isOpen={isAuditModalOpen}
+        onClose={() => setIsAuditModalOpen(false)}
+        card={activePaperData.card}
+      />
+
+      {/* Modern Footer */}
+      <footer className="border-t border-white/5 py-8 text-center text-xs text-slate-500">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p>© 2026 AXIOM • 100% Free Open-Source Academic Intelligence</p>
+          <div className="flex items-center gap-4 text-slate-400">
+            <span>Powered by Ollama + Semantic Scholar Graph API</span>
+            <span>•</span>
+            <a
+              href="https://github.com/One-Hat/GEN_AI"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-cyan-400 transition-colors"
+            >
+              GitHub Repository
+            </a>
+          </div>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      </footer>
+    </div>
+  );
+};
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
-}
-
-export default App
+export default App;

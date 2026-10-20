@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { GitCompare, ArrowRight, ShieldAlert, Wrench, CheckCircle2 } from 'lucide-react';
+import { GitCompare, ShieldAlert, Wrench } from 'lucide-react';
 import { SAMPLE_PAPERS } from '../data/mockPapers';
 
 export const CompareView: React.FC = () => {

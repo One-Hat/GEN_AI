@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import {
   FileText,
   ExternalLink,
-  CheckCircle2,
   AlertOctagon,
   Wrench,
   Terminal,
@@ -12,7 +11,7 @@ import {
   Database,
   Quote,
 } from 'lucide-react';
-import { PaperCard } from '../types';
+import type { PaperCard } from '../types';
 import { WeaknessRadar } from './WeaknessRadar';
 
 interface DissectionViewProps {

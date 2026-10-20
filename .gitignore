@@ -13,6 +13,12 @@ venv/
 .venv/
 env/
 
+# Node & Frontend
+node_modules/
+dist/
+.vite/
+*.local
+
 # IDE files
 .vscode/
 .idea/

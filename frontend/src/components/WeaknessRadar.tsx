@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertTriangle, ChevronDown, CheckCircle2, ShieldAlert, Cpu, Lightbulb, FileText } from 'lucide-react';
-import { PaperCard } from '../types';
+import { AlertTriangle, ChevronDown, CheckCircle2, ShieldAlert, Cpu, FileText } from 'lucide-react';
+import type { PaperCard } from '../types';
 
 interface WeaknessRadarProps {
   weaknesses: PaperCard['assumptions_and_weaknesses'];
